@@ -726,14 +726,14 @@ class VenipakCod extends PaymentModule
 		                    'id_product_attribute' => $product['id_product_attribute'],
 		                    'reference' => $product['reference'],
 		                    'name' => $product['name'] . (isset($product['attributes']) ? ' - ' . $product['attributes'] : ''),
-		                    'price' => Tools::getContextLocale($this->context)->formatPrice($product_price * $product['quantity'], $this->context->currency->iso_code),
+		                    'price' => $this->formatProductPrice($product_price * $product['quantity'], $this->context->currency->iso_code),
 		                    'quantity' => $product['quantity'],
 		                    'customization' => [],
 		                ];
 
 		                if (isset($product['price']) && $product['price']) {
-		                    $product_var_tpl['unit_price'] = Tools::getContextLocale($this->context)->formatPrice($product_price, $this->context->currency->iso_code);
-		                    $product_var_tpl['unit_price_full'] = Tools::getContextLocale($this->context)->formatPrice($product_price, $this->context->currency->iso_code)
+		                    $product_var_tpl['unit_price'] = $this->formatProductPrice($product_price, $this->context->currency->iso_code);
+		                    $product_var_tpl['unit_price_full'] = $this->formatProductPrice($product_price, $this->context->currency->iso_code)
 		                        . ' ' . $product['unity'];
 		                } else {
 		                    $product_var_tpl['unit_price'] = $product_var_tpl['unit_price_full'] = '';
@@ -759,7 +759,7 @@ class VenipakCod extends PaymentModule
 		                        $product_var_tpl['customization'][] = [
 		                            'customization_text' => $customization_text,
 		                            'customization_quantity' => $customization_quantity,
-		                            'quantity' => Tools::getContextLocale($this->context)->formatPrice($customization_quantity * $product_price, $this->context->currency->iso_code),
+		                            'quantity' => $this->formatProductPrice($customization_quantity * $product_price, $this->context->currency->iso_code),
 		                        ];
 		                    }
 		                }
@@ -980,5 +980,13 @@ class VenipakCod extends PaymentModule
 	{
 		Tools::displayAsDeprecated();
 		return $content;
+	}
+
+	private function formatProductPrice($price, $iso_code)
+	{
+		if(version_compare(_PS_VERSION_, '1.7.6', '>=')) {
+			return Tools::getContextLocale($this->context)->formatPrice($price, $iso_code);
+		}
+		return Tools::getCldr($this->context)->getPrice($price, $iso_code);
 	}
 }
