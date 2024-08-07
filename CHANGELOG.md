@@ -1,5 +1,9 @@
 # Changelog
 
+## [Unreleased]
+### Fixed
+- fixed a compatibility issue with Prestashop 1.7 that appeared after the last update
+
 ## [1.0.4] - 2023-09-06
 ### Improved
 - added Changelog file

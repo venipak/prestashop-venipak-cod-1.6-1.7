@@ -492,7 +492,7 @@ class VenipakCod extends PaymentModule
 		$dont_touch_amount = false,
 		$secure_key = false,
 		Shop $shop = null,
-		?string $order_reference = null
+		string $order_reference = null
 	) {
 		$this->context->cart = new Cart($id_cart);
 		$this->context->customer = new Customer($this->context->cart->id_customer);
